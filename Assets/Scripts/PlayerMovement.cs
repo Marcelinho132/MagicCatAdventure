@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        // Jeœli nie przypisano w Inspectorze, szuka na obiekcie lub jego dzieciach
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
     }
@@ -35,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
 
         moveInput = moveInput.normalized;
 
-        // Ustawienie parametru w Animatorze
         if (animator != null)
             animator.SetBool(IsMovingHash, moveInput != Vector2.zero);
     }
