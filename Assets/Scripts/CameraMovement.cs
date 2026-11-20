@@ -1,4 +1,4 @@
-
+﻿
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -15,7 +15,7 @@ public class CameraMovement : MonoBehaviour
         _camera = GetComponent<Camera>();
         _offset = transform.position - player.transform.position;
 
-        // Granice t�a
+        // Granice tła
         Bounds bounds = background.bounds;
 
         float cameraHeight = _camera.orthographicSize;
