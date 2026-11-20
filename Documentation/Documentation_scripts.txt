@@ -1,25 +1,27 @@
-- Bomb – Controls the bomb thrown by the Thrower enemy. Flies in an arc toward the target position, lands on the ground, shows a pulsing circle telegraphing the explosion area, and after the fuse time damages the player within the blast radius.
+-Bomb: Controls the bomb thrown by the Thrower enemy. Flies in an arc toward the target position, lands on the ground, shows a steady red circle telegraphing the blast radius, and after the fuse time damages the player within that radius. On explosion it spawns an ExplosionEffect.
 
-- BruteAttack – Controls the Brute enemy's melee attack. When the player enters attack range, it stops movement, triggers the directional attack animation (AttackLeft or AttackRight depending on which side the player is on), deals damage once per attack, and resumes movement after the attack animation.
+-BruteAttack - Controls the Brute enemy’s melee attack. When the player is in range and beside him, it stops movement and triggers the directional attack animation (AttackLeft or AttackRight depending on which side the player is on). It deals no damage itself. Animation Events call EnableHitbox(side) and DisableHitbox() to switch the left or right hitbox on during the swing. Movement resumes after the attack animation.BruteHitbox (new): Placed on the Brute’s left and right child trigger colliders. Deals damage to the player once per activation when the player touches the hitbox while it is enabled.
 
-- CameraMovement – Controls the camera movement by following the player. Restricts the camera's movement within the background boundaries to prevent showing areas outside the game world.
+-CameraMovement - Controls the camera movement by following the player. Restricts the camera’s movement within the background boundaries to prevent showing areas outside the game world.
 
-- EnemyHealth – Manages enemy health. Tracks maximum and current HP, applies damage when hit by player projectiles, shows a red flash on damage, and destroys the enemy when HP reaches zero.
+-EnemyHealth - Manages enemy health. Tracks maximum and current HP, applies damage when hit by player projectiles, and shows a red flash on damage. On death it disables the enemy’s other scripts, colliders and animator, makes it fall sideways away from the player, lets it lie briefly, fades it out and then destroys it. Exposes a HitCenter (position plus Hit Offset) that projectiles use for hit detection, so enemies with bottom-center pivots can still be hit on the body.
 
-- EnemyMovement – Controls enemy movement toward the player. Approaches the player when outside attack range, retreats when the player gets too close (for ranged enemies like Mage and Thrower), updates the walking animation, and flips the sprite to face the player.
+-EnemyMovement - Controls enemy movement toward the player. Approaches the player when outside stop distance and retreats when the player gets too close (for ranged enemies like Mage and Thrower). With Approach From Side enabled (Brute), it walks to a point on the left or right of the player at Side Standoff Distance. It also keeps enemies apart from each other and from the player, updates the walking animation, and flips the sprite to face the player.
 
-- HealthUI – Manages the health UI displayed on the screen. Updates the heart sprites depending on the player's current health, showing full or empty hearts.
+-ExplosionEffect - Created from code by Bomb. A circle sprite that expands and fades from orange to transparent, then destroys itself. Meant to be replaced later by a proper animation.
 
-- MageAttack – Controls the Mage enemy's attack. When the player is in range, it fires a volley of three Mage shockwave projectiles simultaneously, spread perpendicular to the firing direction, and triggers the Mage attack animation.
+-HealthUI - Manages the health UI displayed on the screen. Updates the heart sprites depending on the player’s current health, showing full or empty hearts.
 
-- MageShockwave – Controls a single Mage shockwave projectile. Flies straight toward its target in the direction the Mage fired, rotates to face the direction of travel, expands on impact, and damages the player if they are within the explosion radius.
+-MageAttack - Controls the Mage enemy’s attack. When the player is in range, it fires a volley of three Mage shockwave projectiles simultaneously, spread perpendicular to the firing direction, and triggers the Mage attack animation.
 
-- MageSpellAttack – Controls the player's spell attack. Shoots the Cat Spell prefab toward the mouse cursor position with a cooldown, supports hold-to-fire, rotates the projectile to the aim direction, and triggers the attack animation.
+-MageShockwave - Controls a single Mage shockwave projectile. Flies in a straight line in the direction the Mage fired, keeps a constant size, rotates to face the direction of travel, and damages the player on contact. It is destroyed on hit or when its lifetime ends.
 
-- PlayerHearts – Manages the player's health system. Tracks the maximum and current number of hearts, allows the player to lose health, and triggers an event whenever the health changes.
+-MageSpellAttack – Controls the player’s spell attack. Shoots the Cat Spell prefab toward the mouse cursor position with a cooldown, supports hold-to-fire, rotates the projectile to the aim direction, and triggers the attack animation.
 
-- PlayerMovement – Controls the player's movement using the WASD keys. Updates the player's position through Rigidbody2D and controls the walking animation using the Animator.
+-PlayerHearts - Manages the player’s health system. Tracks the maximum and current number of hearts, allows the player to lose health (with a short invulnerability window), flashes the player red on every hit, and triggers an event whenever the health changes.
 
-- Spell – Controls a flying spell projectile. Moves in a straight line in the launch direction, rotates the sprite to face the direction of travel, and on impact damages enemies (when canHitEnemy is enabled) or the player (whencanHitPlayer is enabled).
+-PlayerMovement - Controls the player’s movement using the WASD keys. Updates the player’s position through Rigidbody2D and controls the walking animation using the Animator.
 
-- ThrowerAttack – Controls the Thrower/Bomber enemy's attack. When the player is in range, it throws a bomb prefab in an arc toward the player's position with a cooldown and triggers the Thrower attack animation.
+-Spell - Controls a flying spell projectile. Moves in a straight line in the launch direction, rotates the sprite to face the direction of travel, and on impact damages enemies (when canHitEnemy is enabled, measured from the enemy’s HitCenter) or the player (when canHitPlayer is enabled).
+
+-ThrowerAttack - Controls the Thrower/Bomber enemy’s attack. When the player is in range, it throws a bomb prefab in an arc toward the player’s position with a cooldown. The bomb spawns from a child Spawn Point object that is mirrored to whichever side the player is on.
