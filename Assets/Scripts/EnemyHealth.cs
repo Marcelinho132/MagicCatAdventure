@@ -13,6 +13,7 @@ public class EnemyHealth : MonoBehaviour
     public Vector2 HitCenter => (Vector2)transform.position + hitOffset;
 
     private bool isDead;
+    public bool IsDead => isDead;
 
     private int currentHp;
     private SpriteRenderer spriteRenderer;
