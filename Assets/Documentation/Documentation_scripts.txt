@@ -1,0 +1,35 @@
+-Bomb - Controls the bomb thrown by the Thrower enemy. Flies in an arc toward the target position, lands on the ground, shows a steady red circle telegraphing the blast radius, and after the fuse time damages the player within that radius. On explosion it spawns an ExplosionEffect. If the bomb is destroyed early (for example when a room is cleared), it also removes its own circle.
+
+-BruteAttack - Controls the Brute enemy's melee attack. When the player is in range and beside him, it stops movement and triggers the directional attack animation (AttackLeft or AttackRight depending on which side the player is on). It deals no damage itself. Animation Events call EnableHitbox(side) and DisableHitbox() to switch the left or right hitbox on during the swing. Movement resumes after the attack animation.
+
+-BruteHitbox - Placed on the Brute's left and right child trigger colliders. Deals damage to the player once per activation when the player touches the hitbox while it is enabled.
+
+-CameraMovement - Controls the camera movement by following the player. Restricts the camera's movement within the background boundaries to prevent showing areas outside the game world. The limits are calculated once at start, so all backgrounds must be the same size.
+
+-EnemyHealth - Manages enemy health. Tracks maximum and current HP, applies damage when hit by player projectiles, and shows a red flash on damage. On death it disables the enemy's other scripts, colliders and animator, makes it fall sideways away from the player, lets it lie briefly, fades it out and then destroys it. Exposes a HitCenter (position plus Hit Offset) that projectiles use for hit detection, so enemies with bottom-center pivots can still be hit on the body. Also exposes IsDead, which RoomManager uses to count remaining enemies.
+
+-EnemyMovement - Controls enemy movement toward the player. Approaches the player when outside stop distance and retreats when the player gets too close (for ranged enemies like Mage and Thrower). With Approach From Side enabled (Brute), it walks to a point on the left or right of the player at Side Standoff Distance. It also keeps enemies apart from each other and from the player, updates the walking animation, and flips the sprite to face the player.
+
+-ExplosionEffect - Created from code by Bomb. A circle sprite that expands and fades from orange to transparent, then destroys itself. Meant to be replaced later by a proper animation.
+
+-HealthUI - Manages the health UI displayed on the screen. Updates the heart sprites depending on the player's current health, showing full or empty hearts.
+
+-MageAttack - Controls the Mage enemy's attack. When the player is in range, it fires a volley of shockwave projectiles at once (one per assigned bolt sprite), spread perpendicular to the firing direction. It has no animation code.
+
+-MageShockwave - Controls a single Mage shockwave projectile. Flies in a straight line in the direction the Mage fired, keeps a constant size, rotates to face the direction of travel, and damages the player on contact. It is destroyed on hit or when its lifetime ends.
+
+-MageSpellAttack - Controls the player's spell attack. Shoots the Cat Spell prefab toward the mouse cursor position with a cooldown, supports hold-to-fire, rotates the projectile to the aim direction, and triggers the attack animation.
+
+-PlayerHearts - Manages the player's health system. Tracks the maximum and current number of hearts, allows the player to lose health (with a short invulnerability window), flashes the player red on every hit, and triggers an event whenever the health changes. Health carries over between rooms.
+
+-PlayerMovement - Controls the player's movement using the WASD keys. Updates the player's position through Rigidbody2D and controls the walking animation using the Animator.
+
+-Portal - Placed on the portal prefab (needs a trigger collider). RoomManager moves it with Show(position, enterable) and hides it with Hide(). When enterable, it fires a PlayerEntered event as soon as the player touches it. This is also the place to hook up open and close animations later.
+
+-RoomManager - Controls procedural room generation and the room loop in a single scene. Keeps the room counter and shows "Room: X" in a TextMeshPro text. For each room it: Picks a background that never repeats the previous one, except for a Windows easter egg background with its own percentage chance. Randomly places an entry point, an exit point, hazards and enemies, using per-entry radii so nothing overlaps and nothing spawns near the player. Spawns enemies per type, scaling with room number up to a max count (15 each by default). Rolls for a special room from a list with a chance per entry. A special room has no enemies or hazards, and its exit opens immediately. Transition: the black screen fades in, the old room is cleared (including leftover projectiles), and the new room is generated. The screen then fades out and the player walks out of the portal while the player and enemies are frozen. The enemies and player unfreeze and combat starts. After all enemies are dead it waits 1 to 3 seconds, freezes the player, opens the exit portal, and the player walks in. The manager only spawns objects, and their behaviour lives on their own prefabs.
+
+-Spell - Controls a flying spell projectile. Moves in a straight line in the launch direction, rotates the sprite to face the direction of travel, and on impact damages enemies (when canHitEnemy is enabled, measured from the enemy's HitCenter) or the player (when canHitPlayer is enabled).
+
+-Spikes - Test hazard. A trigger collider that damages the player while they stand on it, at most once per damage interval.
+
+-ThrowerAttack - Controls the Thrower/Bomber enemy's attack. When the player is in range, it throws a bomb prefab in an arc toward the player's position with a cooldown. The bomb spawns from a child Spawn Point object that is mirrored to whichever side the player is on. It has no animation code.

@@ -15,7 +15,6 @@ public class CameraMovement : MonoBehaviour
         _camera = GetComponent<Camera>();
         _offset = transform.position - player.transform.position;
 
-        // Granice tła
         Bounds bounds = background.bounds;
 
         float cameraHeight = _camera.orthographicSize;

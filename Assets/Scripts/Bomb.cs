@@ -142,4 +142,9 @@ public class Bomb : MonoBehaviour
             tr != null ? tr.sortingLayerID : 0,
             tr != null ? tr.sortingOrder + 1 : 1);
     }
+
+    private void OnDestroy()
+    {
+        if (telegraphObj != null) Destroy(telegraphObj);
+    }
 }
